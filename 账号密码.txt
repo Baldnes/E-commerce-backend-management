@@ -1,0 +1,10 @@
+超级管理员
+admin z123456
+
+基础管理员
+xadmin z123456
+
+注：超级管理员在用户信息可以新增账号
+切换到my-project目录
+安装依赖 npm i
+开启服务 npm run dev
