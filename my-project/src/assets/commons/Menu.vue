@@ -52,8 +52,6 @@
 
 
 <script>
-import { is } from "express/lib/request";
-
 export default {
   name: "Menu",
   data() {
@@ -76,6 +74,7 @@ export default {
         });
       }
       this.$store.commit("selectMenu", item);
+      console.log(this.$route);
     },
   },
   mounted() {

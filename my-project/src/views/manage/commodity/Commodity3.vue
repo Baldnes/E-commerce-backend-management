@@ -20,7 +20,7 @@
     </div>
     <div class="price">
       金额/元
-      <el-input v-model="price"></el-input>
+      <el-input v-model="price" type="number"></el-input>
     </div>
     <div>
       上架数量<el-input-number v-model="num" :min="1" :max="100000" label="上架数量"></el-input-number>
@@ -66,7 +66,8 @@ export default {
         category: this.category,
         brief: this.brief,
         price: Number(this.price).toFixed(2),
-        snum:this.num
+        snum:this.num,
+        num:this.num
       }
       this.$store.commit('addmanage',newArr)
       this.$message({
@@ -78,6 +79,7 @@ export default {
         this.brief = ""
         this.date = ""
         this.category = "婴幼儿"
+        this.num = ""
       }
     }
   }

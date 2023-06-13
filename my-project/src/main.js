@@ -13,6 +13,7 @@ import * as echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
 Vue.config.productionTip = false
 Vue.use(ElementUI).use(VueAxios, axios)
+Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,

@@ -99,22 +99,25 @@ export default {
             value: '',
             tableData: [],
             currentPage: 1, // 当前页码
-            total: 20, // 总条数
+            total: 0, // 总条数
             pageSize: 5, // 每页的数据条数
             keyword: "", //搜索商品名称
             hao: "",
             int: ""
         }
     },
-    mounted() {
+    created() {
         this.$store.commit('changlist')
         this.tableData = this.$store.state.dingList
+        this.total = this.tableData.length
     },
     updated() {
         if (this.keyword == "") {
             this.tableData = this.$store.state.dingList
         }
-
+    },
+    mounted() {
+       
     },
     methods: {
         handleClick(row) {
@@ -149,6 +152,10 @@ export default {
             this.dialogVisible = false
             this.int = this.$store.state.dingList.findIndex(e => e.danhao == this.hao)
             this.$store.commit("changeding", this.int)
+            let total = Math.ceil((this.tableData.length) / this.pageSize)
+            console.log(total);
+            this.currentPage = this.currentPage > total ? total : this.currentPage
+            this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
             this.tableData = this.$store.state.dingList.filter(val => {
                 return val.name.includes(this.keyword) || val.danhao.includes(this.keyword) || val.txt.includes(this.keyword);
             })
@@ -182,6 +189,7 @@ export default {
 
 .demo-table-expand {
     font-size: 0;
+    padding-left: 55px;
 }
 
 .demo-table-expand label {

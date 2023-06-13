@@ -23,12 +23,12 @@
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="下架商品" placement="bottom">
             <el-popconfirm title="确认下架嘛？" confirm-button-text='确认' cancel-button-text='取消' icon="el-icon-info"
-            icon-color="red" @confirm="deleteItem(scope)">
-            <el-button slot="reference" :plain="true" type="text" style="color: red;" class="btn"><i
-                class="el-icon-delete"></i></el-button>
-          </el-popconfirm>
+              icon-color="red" @confirm="deleteItem(scope)">
+              <el-button slot="reference" :plain="true" type="text" style="color: red;" class="btn"><i
+                  class="el-icon-delete"></i></el-button>
+            </el-popconfirm>
           </el-tooltip>
-          
+
         </template>
       </el-table-column>
     </el-table>
@@ -39,7 +39,7 @@
       </el-pagination>
     </div>
     <div class="search">
-      <el-input placeholder="请输入需要搜索的商品名称" v-model="keyword"></el-input>
+      <el-input placeholder="请输入需要搜索的商品名称" v-model="keyword" clearable @clear="filterItems()"></el-input>
       <el-button @click="filterItems()">搜索</el-button>
     </div>
     <el-dialog title="修改商品" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
@@ -72,6 +72,9 @@ export default {
       this.tablist = this.myArray.filter(val => {
         return val.name.includes(this.keyword);
       })
+      let total = Math.ceil((this.tablist.length) / this.pageSize)
+      this.currentPage = this.currentPage > total ? total : this.currentPage
+      this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
       this.$message.error('下架成功');
     },
     //每页条数改变时触发 选择一页显示多少行
@@ -84,8 +87,8 @@ export default {
       this.currentPage = val;
     },
     filterItems() {
-      this.tablist = this.myArray.filter(val => 
-         val.name.includes(this.keyword) || val.brief.includes(this.keyword))
+      this.tablist = this.myArray.filter(val =>
+        val.name.includes(this.keyword) || val.brief.includes(this.keyword))
     },
     change(val) {
       this.dialogVisible = true
@@ -104,7 +107,7 @@ export default {
         this.$message.error('请完善商品信息');
       } else {
         this.dialogVisible = false
-        this.$store.commit('changeItems',[this.int,this.changeDate,this.changeCategory,this.changeName,this.changePrice,this.changeText,this.num,this.snum])
+        this.$store.commit('changeItems', [this.int, this.changeDate, this.changeCategory, this.changeName, this.changePrice, this.changeText, this.num, this.snum])
       }
     },
     handleClose(done) {
@@ -115,17 +118,12 @@ export default {
         .catch(_ => { });
     }
   },
-  updated() {
-    if (this.keyword == "") {
-      this.tablist = this.myArray
-    }
-  },
   data() {
     return {
       dialogVisible: false,
-      item:"",
-      num:"",
-      snum:"",
+      item: "",
+      num: "",
+      snum: "",
       tabs: [
         {
           prop: "date",
@@ -153,7 +151,7 @@ export default {
         }
       ],
       currentPage: 1, // 当前页码
-      total: 20, // 总条数
+      total: 50, // 总条数
       pageSize: 5, // 每页的数据条数
       keyword: "", //搜索商品名称
       tablist: [],

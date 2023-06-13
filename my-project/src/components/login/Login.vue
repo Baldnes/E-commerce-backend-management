@@ -11,20 +11,20 @@
 
           <el-form-item label="账　号" prop="user">
 
-            <el-input style="width: 210px;" type="text" v-model="form.user" placeholder="请输入账号"
+            <el-input maxlength="11" style="width: 210px;" type="text" v-model="form.user" placeholder="请输入账号"
               onKeyUp="value=value.replace(/[\W]/g,'')"></el-input>
 
           </el-form-item>
 
           <el-form-item label="密　码" prop="password">
 
-            <el-input style="width: 210px;" show-password v-model="form.password" placeholder="请输入密码"></el-input>
-
+            <el-input style="width: 210px;" show-password v-model="form.password" placeholder="请输入密码" onkeyup="this.value=this.value.replace(/[\u4E00-\u9FA5]/g,'')"></el-input>
+            <!-- onkeyup="this.value=this.value.replace(/[\u4E00-\u9FA5]/g,'')" 不能输入汉子=字 -->
           </el-form-item>
 
           <el-form-item label="验证码" prop="captcha">
 
-            <el-input @blur="rcaptcha" style="width: 120px;" v-model="form.captcha" placeholder="请输入验证码"
+            <el-input maxlength="4" @blur="rcaptcha" style="width: 120px;" v-model="form.captcha" placeholder="请输入验证码"
               oninput="value=value.replace(/[^\d.]/g,'')"></el-input>
 
             <!-- oninput="value=value.replace(/[^\d.]/g,'')"   使输入框只能输入数字 -->
@@ -1276,128 +1276,71 @@
 </template>
 
 <script>
-
 export default {
-
   name: "Login",
 
-
-
   data() {
-
     return {
-
       form: {
-
         password: "",
-
-
 
         user: "",
 
-
-
         captcha: "",
-
       },
-
-
 
       checked: false,
 
-
-
       code: "",
 
-      bbc: '',
+      bbc: "",
 
       dialogVisible: false,
 
-
-
       rules: {
-
         user: [
-
           {
-
             required: true,
 
-
-
             trigger: "blur",
-
-
 
             message: "请输入账号",
-
           },
-
         ],
-
-
 
         password: [
-
           {
-
             required: true,
 
-
-
             trigger: "blur",
-
-
 
             message: "请输入密码",
-
           },
-
         ],
 
-
-
         captcha: [
-
           {
-
             required: true,
-
-
 
             trigger: "blur",
 
-
-
             message: "请输入验证码",
-
           },
-
         ],
-
       },
 
-
-
       add: [],
-
     };
-
   },
 
-
-
   mounted() {
-
     // 调用随机数函数//刚进入页面随机先获取一个
     this.createCode();
     this.add = this.$store.state.add;
   },
   methods: {
-
     s1() {
-      var a = this.$store.state.add.some(item => item.user == this.form.user)
-      console.log(a);
+      var a = this.$store.state.add.some((item) => item.user == this.form.user);
       if (this.form.user != "" && !a) {
         const h = this.$createElement;
         this.$message({
@@ -1406,15 +1349,16 @@ export default {
             h("i", { style: "color: teal" }, "账号不存在"),
           ]),
         });
-      }  if (this.form.user == "") {
-              const h = this.$createElement;
-              this.$message({
-                message: h("p", null, [
-                  h("span", null, "温馨提示 "),
-                  h("i", { style: "color: teal" }, "请输入账号"),
-                ]),
-              });
-            } else {
+      }
+      if (this.form.user == "") {
+        const h = this.$createElement;
+        this.$message({
+          message: h("p", null, [
+            h("span", null, "温馨提示 "),
+            h("i", { style: "color: teal" }, "请输入账号"),
+          ]),
+        });
+      } else {
         //判断用户有没有同意协议
         for (let i = 0; i < this.add.length; i++) {
           if (
@@ -1422,19 +1366,15 @@ export default {
             this.form.captcha == this.code &&
             this.form.user == this.add[i].user
           ) {
-
-
             var c = i;
 
-
-            this.bbc = c
-
+            this.bbc = c;
 
             this.$store.commit("updateData", this.bbc);
 
             if (this.form.password == this.add[c].password) {
               this.$store.state.changeLu = 1;
-              this.$store.commit('tookin', this.form.user)
+              this.$store.commit("tookin", this.form.user);
               this.$router.push({
                 path: "/home",
               });
@@ -1446,22 +1386,15 @@ export default {
                 ]),
               });
             } else {
-
               if (this.checked != true) {
-
                 const h = this.$createElement;
 
                 this.$message({
-
                   message: h("p", null, [
-
                     h("span", null, "温馨提示 "),
                     h("i", { style: "color: teal" }, "请同意协议"),
-
                   ]),
-
                 });
-
               } else if (this.form.password != this.add[c].password) {
                 const h = this.$createElement;
                 this.$message({
@@ -1471,121 +1404,64 @@ export default {
                   ]),
                 });
               }
-
             }
             this.createCode();
-
           }
         }
       }
     },
 
-
-
     //验证码框失去焦点时，验证码不一致，报错
 
-
-
     rcaptcha() {
-
       if (this.form.captcha != this.code) {
-
         this.$message.error("验证码错了");
 
-
-
         this.createCode();
-
       }
-
     },
-
-
-
-
 
     //用户协议弹窗
 
-
-
     login_checked() {
-
       this.checked = !this.checked;
-
     },
-
-
 
     handleClose(done) {
-
       done();
-
     },
-
-
 
     // 验证码刷新与长度
 
-
-
     createCode() {
-
       let code = "";
-
-
 
       //设置长度，这里看需求，我这里设置了4
 
-
-
       var codeLength = 4;
-
-
 
       //设置随机字符
 
-
-
       var random = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-
-
 
       //循环codeLength 我设置的4就是循环4次
 
-
-
       for (var i = 0; i < codeLength; i++) {
-
         //设置随机数范围,这设置为0 ~ 36
-
-
 
         var index = Math.floor(Math.random() * 9);
 
-
-
         //字符串拼接 将每次随机的字符 进行拼接
 
-
-
         code += random[index];
-
       }
-
-
 
       //将拼接好的字符串赋值给展示的code
 
-
-
       this.code = code;
-
     },
-
   },
-
 };
-
 </script>
 
 
@@ -1596,256 +1472,130 @@ export default {
 
 <style lang="less" scoped>
 * {
-
   font-family: "Times New Roman", Times, serif;
-
 }
 
-
-
 .login_card {
-
   width: 400px;
-
-
 
   // border: 1px solid #8fb2c9;
 
-
-
   margin: auto;
-
-
 
   padding: 35px 35px 15px 35px;
 
-
-
   background-color: #d8e2ea;
-
-
 
   // background-image: linear-gradient(25deg, #0270f3, #2f8fe4, #30afd5, #06cec4);
 
-
-
   border-radius: 15px; //圆角
-
-
 
   // box-shadow: 0 0 15px #f3d276; //阴影
 
-
-
   box-sizing: border-box;
 
-
-
   position: relative;
-
-
 
   top: 150px;
 
-
-
   left: 25em;
 
-
-
   .login_button {
-
     //登录按钮
-
-
 
     margin-left: 135px;
 
-
-
     margin-top: 0px;
-
   }
 
-
-
   .login_title {
-
     //登录标题
-
-
 
     text-align: center;
 
-
-
     padding-bottom: 40px;
 
-
-
     font-size: 40px;
-
   }
-
-
 
   .login_zb:hover {
-
     text-decoration: underline;
-
   }
 
-
-
   .login_za {
-
     padding-left: 15px;
-
-
 
     font-size: 13px;
 
-
-
     color: #474242;
-
-
 
     position: relative;
 
-
-
     top: -40px;
-
   }
-
 }
 
-
-
 .dialog_div {
-
   height: 380px;
-
-
 
   overflow: auto;
 
-
-
   font-size: 18px;
-
 }
 
-
-
 .code {
-
   //验证码
-
-
 
   width: 90px;
 
-
-
   height: 40px;
-
-
 
   background-color: #f7f0e9;
 
-
-
   opacity: 0.6;
-
-
 
   text-align: center;
 
-
-
   font-size: 30px;
-
-
 
   margin-left: 10px;
 
-
-
   padding-top: 5px;
-
-
 
   border: 1px solid #dbd8d4;
 
-
-
   border-radius: 7px; //圆角
-
-
 
   user-select: none;
 
-
-
   color: rgb(31, 125, 125);
-
-
 
   position: relative;
 
-
-
   top: -62.5px;
-
-
 
   left: 180px;
 
-
-
   box-sizing: border-box;
-
 }
 
-
-
 .container {
-
   // position: absolute;
-
-
 
   // height: 100%;
 
-
-
   // width: 100%;
-
-
 
   background-image: url("../../assets/img/04.jpg");
 
-
-
   background-size: cover;
-
-
 
   background-color: #93b5cf;
 
-
-
   // background-image: linear-gradient( 135deg, #FEB692 10%, #EA5455 100%);
-
-
 
   height: 100%;
 
-
-
   width: 100%;
-
 }
 </style>

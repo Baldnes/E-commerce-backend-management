@@ -4,34 +4,37 @@
   </div>
 </template>
   
-  <script>
+<script>
 export default {
   name: "app",
   data() {
     return {};
   },
-  mounted() {
+  beforeCreate() {
     this.$store.commit('man')
     this.$store.commit('changlist')
     this.$store.commit('wu')
-    if(this.$store.state.changeLu == 0) {
+  },
+  mounted() {
+    if (this.$store.state.changeLu == 0) {
       this.$router.push({
-        path:"/"
+        path: "/"
       })
     }
   }
 };
 </script>
   
-  <style lang="less">
-
+<style lang="less">
 .el-card__body,
 .el-main {
   padding: 0 0 0 10px;
 }
+
 .el-tabs__item {
   color: #024b4d;
 }
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -41,12 +44,14 @@ export default {
   height: 840px;
   overflow-y: hidden;
 }
+
 input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
-input[type="number"]{
-    -moz-appearance: textfield;
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 </style>
   

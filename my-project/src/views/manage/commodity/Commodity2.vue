@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-table :data="tablist.slice((currentPage - 1) * pageSize, currentPage * pageSize)" width="1030" height="618">
-      <el-table-column v-for="(item, index) in tabs" :key="index" :fixed="item.fixed" :prop="item.prop" :label="item.label"
-        :width="item.wid">
+      <el-table-column v-for="(item, index) in tabs" :key="index" :fixed="item.fixed" :prop="item.prop"
+        :label="item.label" :width="item.wid">
       </el-table-column>
       <el-table-column prop="price" label="金额" width="180">
         <template slot-scope="scope">
@@ -71,6 +71,9 @@ export default {
         this.tablist = this.deletedArr.filter(val => {
           return val.name.includes(this.keyword);
         })
+      let total = Math.ceil((this.tablist.length) / this.pageSize)
+      this.currentPage = this.currentPage > total ? total : this.currentPage
+      this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
       this.$message({
         message: '上架成功',
         type: 'success'
@@ -78,8 +81,12 @@ export default {
     },
     cleanUp(val) {
       this.$store.commit('clearItem', val.row.name),
-        this.tablist = this.deletedArr.filter(val =>  val.name.includes(this.keyword)|| val.brief.includes(this.keyword))
+        this.tablist = this.deletedArr.filter(val => val.name.includes(this.keyword) || val.brief.includes(this.keyword))
       this.$message.error('删除成功');
+      let total = Math.ceil((this.tableData.length) / this.pageSize)
+      console.log(total);
+      this.currentPage = this.currentPage > total ? total : this.currentPage
+      this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
     }
   },
   data() {

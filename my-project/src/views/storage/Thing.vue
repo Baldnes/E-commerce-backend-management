@@ -4,7 +4,7 @@
             <el-tab-pane label="数码产品" name="first">
                 <div>
                     <div>
-                        <el-input style="width: 300px;" v-model="keyword" />
+                        <el-input style="width: 300px;" v-model="keyword" placeholder="请输入需要搜索的商品名称" />
 
                         <el-button @click="send">搜索</el-button>
 
@@ -559,7 +559,7 @@ export default {
       listeight: state => state.listeight,
     })   
     },
-    mounted() {
+    created() {
         this.$store.commit("man")
         this.tablenata = this.list,
         this.tabletwo = this.listtwo
