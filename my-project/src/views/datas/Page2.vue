@@ -959,7 +959,7 @@ export default {
 
   height: 45%;
 
-  background-color: beige;
+  background-color: #fff;
 
   display: flex;
 
