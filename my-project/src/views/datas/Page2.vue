@@ -829,9 +829,10 @@ export default {
 
       .top-right-1b {
 
+        margin-top: 5px;
         width: 30%;
 
-        height: 16%;
+        height: 140px;
 
         border-radius: 30px;
 
@@ -839,7 +840,7 @@ export default {
 
         position: absolute;
 
-        top: 13%;
+        top: 100px;
 
         right: 2.5%;
 
@@ -905,9 +906,10 @@ export default {
 
       .top-right-2b {
 
+        margin-top: 5px;
         width: 30%;
 
-        height: 18%;
+        height: 150px;
 
         border-radius: 30px;
 
@@ -915,7 +917,7 @@ export default {
 
         position: absolute;
 
-        top: 38%;
+        top: 300px;
 
         right: 2.5%;
 
